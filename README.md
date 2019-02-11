@@ -1,5 +1,5 @@
-# Autobahn Playground
-Repository to explore https://crossbar.io/autobahn/
+# Exploring Web Application Messaging Protocol
+Repository to explore the power of Wamp using [https://crossbar.io/autobahn/](autobahn). 
 
 ## Installation
 ``` pip install -r requirements.txt ```

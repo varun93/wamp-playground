@@ -1,4 +1,4 @@
-# autobahn-playground
+# Autobahn Playground
 Repository to explore https://crossbar.io/autobahn/
 
 ## Installation

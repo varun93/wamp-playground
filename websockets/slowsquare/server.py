@@ -2,7 +2,7 @@ from autobahn.twisted.websocket import WebSocketServerProtocol,WebSocketServerFa
 from twisted.internet.defer import Deferred,inlineCallbacks,returnValue
 import json
 
-
+# simulating a delay
 def sleep(delay):
     d = Deferred()
     reactor.callLater(delay, d.callback, None)

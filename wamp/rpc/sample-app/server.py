@@ -31,12 +31,19 @@ class Component(ApplicationSession):
         # a MyService1 instance and register all the methods on it and
         # on ourselves
 
+        self.id = "1"
+        self.pid = "1"
+        self.minMoney = 200
+        # self.test = self.pid == 0
+        self.stealing = False
+
+
         results = []
         svc1 = MyService1()
 
         # register all @register-decorated methods from "svc1":
-        res = yield self.register(svc1)
-        results.extend(res)
+        # res = yield self.register(svc1)
+        # results.extend(res)
 
         # register all our own @register-decorated methods:
         res = yield self.register(self)

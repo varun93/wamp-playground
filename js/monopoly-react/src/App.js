@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as constants from "./constants";
+import { substituteEndpoint } from "./utils";
 import "./App.css";
 const autobahn = require("autobahn");
 
@@ -7,6 +8,9 @@ class App extends Component {
   constructor(props, context) {
     super(props, context);
     this.session = null;
+    // currently hardcoding game id and agent id
+    this.gameId = 1;
+    this.agentId = 1;
     this.state = {
       actionButton: ""
     };
@@ -31,49 +35,59 @@ class App extends Component {
 
   /* Receivers  */
   receiveTradeRequest = state => {
-    this.setState({ actionButton: "trade" });
+    this.setState({ actionButton: constants.TRADE_ACTION });
     console.log(state);
   };
 
   receiveAuctionRequest = state => {
-    this.setState({ actionButton: "auction" });
+    this.setState({ actionButton: constants.AUCTION_ACTION });
     console.log(state);
   };
 
   receiveBSMRequest = state => {
-    this.setState({ actionButton: "bsm" });
+    this.setState({ actionButton: constants.BSM_ACTION });
     console.log(state);
   };
 
   receiveJailDecisionRequest = state => {
-    this.setState({ actionButton: "jail-decision" });
+    this.setState({ actionButton: constants.JAIL_DECISION_ACTION });
     console.log(state);
   };
 
   /* Send Response; action listners  */
 
   sendTradeResponse = event => {
-    console.log(event.target);
+    this.session.publish(substituteEndpoint(constants.TRADE_PUBLISHER));
   };
 
   sendAuctionResponse = event => {
-    console.log(event.target);
+    this.session.publish(substituteEndpoint(constants.AUCTION_PUBLISHER));
   };
 
   sendBSMResponse = event => {
-    console.log(event.target);
+    this.session.publish(substituteEndpoint(constants.BSM_PUBLISH));
   };
 
   sendJailDecisionResponse = event => {
-    console.log(event.target);
+    this.session.publish(substituteEndpoint(constants.JAIL_PUBLISHER));
   };
 
   subscribeToEvents = () => {
-    this.session.subscribe("monopoly.trade", this.receiveTradeRequest);
-    this.session.subscribe("monopoly.auction", this.receiveAuctionRequest);
-    this.session.subscribe("monopoly.bsm", this.receiveBSMRequest);
+    const { gameId, agentId } = this;
     this.session.subscribe(
-      "monopoly.jail_decision",
+      substituteEndpoint(constants.TRADE_RECEIVER, agentId, gameId),
+      this.receiveTradeRequest
+    );
+    this.session.subscribe(
+      substituteEndpoint(constants.AUCTION_RECEIVER, agentId, gameId),
+      this.receiveAuctionRequest
+    );
+    this.session.subscribe(
+      substituteEndpoint(constants.BSM_RECEIVER, agentId, gameId),
+      this.receiveBSMRequest
+    );
+    this.session.subscribe(
+      substituteEndpoint(constants.JAIL_RECEIVER, agentId, gameId),
       this.receiveJailDecisionRequest
     );
   };
